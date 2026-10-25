@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07131d">
+  <title>Alpine Signal — Colorado Avalanche Research</title>
+  <style>
+    :root{color-scheme:dark;--ink:#f0f6f7;--muted:#8fa7b5;--line:#243746;--panel:#0c1b27;--ice:#a8d8e8;--cyan:#73d8dc;--gold:#efbf79;--danger:#ff8e69}
+    *{box-sizing:border-box}body{margin:0;background:#07131d;color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+    .shell{min-height:100vh;display:grid;grid-template-columns:370px minmax(0,1fr)}
+    aside{z-index:2;padding:28px 28px 24px;background:linear-gradient(160deg,#102331,#0b1a25 62%);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:23px}
+    .brand{display:flex;align-items:center;gap:11px}.brand-mark{width:35px;height:35px;border:1px solid #3d6473;border-radius:11px;display:grid;place-items:center;color:var(--ice);background:#132c39}.brand-name{font-size:13px;font-weight:750;letter-spacing:.13em;text-transform:uppercase}.brand-sub{font-size:11px;color:#77919e;letter-spacing:.08em}
+    .eyebrow{color:#7da2b2;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700}.intro h1{font-size:27px;letter-spacing:-.04em;line-height:1.13;margin:8px 0}.intro p{margin:0;color:#a5b7c1;font-size:13px}
+    .notice{border:1px solid #6c5635;background:#251f17;color:#e9c994;border-radius:9px;padding:10px 12px;font-size:11px;line-height:1.45}.notice strong{display:block;font-size:10px;letter-spacing:.12em;margin-bottom:2px}
+    .form{display:grid;gap:17px}.field label{display:flex;justify-content:space-between;align-items:baseline;color:#dce8eb;font-size:12px;font-weight:650}.field label span{font-size:10px;font-weight:450;color:#7993a1}.field input{appearance:none;width:100%;height:43px;margin-top:7px;background:#091721;border:1px solid #2a414e;border-radius:7px;color:#f4f8f8;padding:0 12px;font:inherit;outline:none}.field input:focus{border-color:#79bac9;box-shadow:0 0 0 3px #8bd6e51c}.field input[type=date]{color-scheme:dark}.field .hint{font-size:10px;color:#78909c;margin-top:5px}.field input[type=range]{height:4px;padding:0;margin-top:18px;accent-color:#81d1d9;border:0;background:#34505c;border-radius:8px}.aspect-readout{font-variant-numeric:tabular-nums;color:var(--ice)!important}
+    .submit{height:46px;border:0;border-radius:8px;background:linear-gradient(110deg,#bce7e7,#82c7d1);color:#08202b;font:700 13px/1 system-ui,sans-serif;letter-spacing:.01em;cursor:pointer;box-shadow:0 7px 22px #3da8b326;transition:transform .16s,filter .16s}.submit:hover{filter:brightness(1.06);transform:translateY(-1px)}.submit:disabled{opacity:.65;cursor:wait;transform:none}
+    .model-note{padding-top:14px;border-top:1px solid var(--line);font-size:10px;color:#78909c}.model-note b{display:block;color:#a9bec6;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+    main{min-width:0;position:relative;display:flex;flex-direction:column;min-height:100vh;overflow:hidden;background:radial-gradient(ellipse at 65% 37%,#183342 0,#102531 34%,#0a1823 76%)}
+    .topbar{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;padding:27px 34px}.location{display:flex;align-items:center;gap:9px;font-size:11px;color:#b6c7cd;letter-spacing:.09em;text-transform:uppercase}.live-dot{width:7px;height:7px;border-radius:50%;background:#79c8c8;box-shadow:0 0 11px #79c8c8}.season{font-size:10px;color:#718b98;letter-spacing:.1em}
+    .scene{position:relative;flex:1;min-height:490px;display:flex;align-items:center;justify-content:center}.scene:before{content:"";position:absolute;width:min(78vw,860px);height:min(78vw,860px);border-radius:50%;background:radial-gradient(circle,#74b9cd0d,transparent 66%)}.mountain-wrap{position:relative;width:min(94%,980px);height:min(68vh,610px);min-height:440px}.mountain{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.mountain .snow{transition:fill .6s}.mountain .avalanche-layer{opacity:0;transition:opacity .7s}.mountain.predicted .avalanche-layer{opacity:1}.mountain.predicted .snowcap{fill:#e7f7f5}.mountain .snowcap{transition:fill .5s}.mountain.predicted .slide-glow{animation:glow 2.4s ease-in-out infinite alternate}.mountain .snowfall{opacity:.7}.mountain.predicted .snowfall{opacity:.14}@keyframes glow{to{opacity:.55;filter:blur(9px)}}
+    .mountain[data-risk="Low"] .avalanche-layer{opacity:.3}.mountain[data-risk="Moderate"] .avalanche-layer{opacity:.48}.mountain[data-risk="Considerable"] .avalanche-layer{opacity:.68}.mountain[data-risk="High"] .avalanche-layer,.mountain[data-risk="Extreme"] .avalanche-layer{opacity:1}.mountain[data-risk="High"] #slide-path,.mountain[data-risk="Extreme"] #slide-path{filter:drop-shadow(0 0 8px #b8fff5a8)}
+    .scene-label{position:absolute;left:5%;top:8%;display:grid;gap:5px}.scene-label strong{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#c1d4da}.scene-label span{font-size:11px;color:#708c98}.scene-foot{position:absolute;right:5%;bottom:8%;font-size:9px;color:#68808b;letter-spacing:.16em;text-transform:uppercase;writing-mode:vertical-rl}
+    .results{position:relative;z-index:1;min-height:150px;margin:0 34px 28px;border:1px solid #2a414d;background:#0b1a25df;backdrop-filter:blur(12px);border-radius:12px;padding:17px 21px;display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;align-items:center;gap:14px}.result-lead{display:grid;gap:4px}.result-lead .eyebrow{font-size:9px}.result-lead strong{font-size:21px;letter-spacing:-.03em}.result-lead small{color:#79919c;font-size:10px}.metric{border-left:1px solid #263b47;padding-left:17px;min-height:61px;display:flex;flex-direction:column;justify-content:center}.metric span{font-size:9px;color:#8199a4;letter-spacing:.1em;text-transform:uppercase}.metric strong{font-size:22px;font-weight:580;letter-spacing:-.04em;font-variant-numeric:tabular-nums;margin-top:3px}.metric small{font-size:9px;color:#708893}.placeholder{color:#78909b!important;font-size:14px!important;letter-spacing:0!important}
+    .result-lead[data-risk="Low"] strong{color:#8fd3c5}.result-lead[data-risk="Moderate"] strong{color:#c5dc8b}.result-lead[data-risk="Considerable"] strong{color:#efc47e}.result-lead[data-risk="High"] strong{color:#f29d6d}.result-lead[data-risk="Extreme"] strong{color:#ff7777}
+    footer{position:relative;z-index:1;text-align:center;color:#617985;font-size:9px;padding:0 25px 15px}.error{display:none;color:#ffb19b;font-size:11px;margin-top:-11px}
+    @media(max-width:850px){.shell{grid-template-columns:320px minmax(0,1fr)}aside{padding:23px 20px}.results{margin:0 20px 22px;grid-template-columns:1fr 1fr}.metric:nth-child(3){border-left:0;padding-left:0}.scene{min-height:430px}.mountain-wrap{height:520px}}
+    @media(max-width:650px){.shell{display:flex;flex-direction:column}aside{border-right:0;border-bottom:1px solid var(--line);padding:19px 20px;gap:15px}.intro h1{font-size:23px}.intro p{max-width:500px}.form{grid-template-columns:1fr 1fr;gap:12px}.submit{grid-column:1/-1}.model-note{padding-top:10px}main{min-height:650px}.topbar{padding:18px 20px}.scene{min-height:350px}.mountain-wrap{height:380px;min-height:350px}.scene-label{top:3%;left:2%}.scene-foot{right:2%}.results{margin:0 14px 18px;padding:14px;gap:10px}.metric{padding-left:12px}.metric strong{font-size:18px}.result-lead strong{font-size:18px}footer{padding-bottom:12px}}
+    @media(max-width:390px){.form{grid-template-columns:1fr}.submit{grid-column:auto}.results{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand"><div class="brand-mark" aria-hidden="true">▲</div><div><div class="brand-name">Alpine Signal</div><div class="brand-sub">COLORADO · RESEARCH MODEL</div></div></div>
+      <header class="intro"><div class="eyebrow">Slope outlook</div><h1>Read the mountain.</h1><p>Explore how the prototype responds to a forecast day and slope aspect.</p></header>
+      <div class="notice"><strong>RESEARCH PROTOTYPE</strong>Not an official forecast. Never use for travel, terrain, or safety decisions.</div>
+      <form class="form" id="predict-form">
+        <div class="field"><label for="date">Forecast date <span>local calendar day</span></label><input id="date" name="date" type="date" required></div>
+        <div class="field"><label for="aspect">Slope aspect <span class="aspect-readout" id="aspect-value">315° · NW</span></label><input id="aspect" name="aspect" type="range" min="0" max="360" step="1" value="315"><div class="hint">Degrees clockwise from north</div></div>
+        <button class="submit" id="submit" type="submit">Run prototype prediction <span aria-hidden="true">↗</span></button>
+        <div class="error" id="error" role="alert"></div>
+      </form>
+      <div class="model-note"><b>Inputs used by this model</b>Date and aspect only. Weather, snowpack, slope angle, and elevation are not represented in the currently fitted model.</div>
+    </aside>
+    <main>
+      <div class="topbar"><div class="location"><span class="live-dot"></span>Colorado backcountry</div><div class="season">A CONCEPTUAL MODEL VIEW</div></div>
+      <section class="scene" aria-label="Mountain visualization">
+        <div class="scene-label"><strong id="scene-title">Quiet snowpack</strong><span id="scene-subtitle">Set inputs to explore a scenario</span></div>
+        <div class="mountain-wrap">
+          <svg class="mountain" id="mountain" viewBox="0 0 900 590" role="img" aria-labelledby="mountain-title mountain-desc" preserveAspectRatio="xMidYMid meet">
+            <title id="mountain-title">Illustrated Colorado mountain</title><desc id="mountain-desc">A calm snow-covered mountain before a prediction is run.</desc>
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#2d596a" stop-opacity=".24"/><stop offset="1" stop-color="#0b1b25" stop-opacity="0"/></linearGradient>
+              <linearGradient id="rock" x1=".1" y1="0" x2=".9" y2="1"><stop stop-color="#658795"/><stop offset=".45" stop-color="#294653"/><stop offset="1" stop-color="#102630"/></linearGradient>
+              <linearGradient id="shade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a4c8d0"/><stop offset="1" stop-color="#385a66"/></linearGradient>
+              <linearGradient id="snow" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f5fcfa"/><stop offset=".55" stop-color="#c6e4e9"/><stop offset="1" stop-color="#8bb6c1"/></linearGradient>
+              <linearGradient id="slide" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#fff"/><stop offset=".38" stop-color="#d7f1ef"/><stop offset="1" stop-color="#81c6d1"/></linearGradient>
+              <filter id="blur"><feGaussianBlur stdDeviation="10"/></filter>
+              <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="#9bd2df" stroke-opacity=".05" stroke-width="1"/></pattern>
+            </defs>
+            <ellipse cx="462" cy="514" rx="340" ry="30" fill="#7db4c0" opacity=".12" filter="url(#blur)"/>
+            <path d="M0 0h900v590H0z" fill="url(#sky)"/><path d="M0 0h900v590H0z" fill="url(#grid)"/>
+            <!-- Distant ridge -->
+            <path d="M0 423 120 348 196 384 282 302 365 390 474 318 568 388 687 300 786 376 900 311V590H0Z" fill="#172f39" opacity=".85"/>
+            <path d="m82 373 38-25 30 17-19-2-13 10-14-5zM248 334l34-32 28 30-20-7-14 10-11-4zM650 335l37-35 39 32-24-8-17 10-15-2z" fill="#7c9ea7" opacity=".32"/>
+            <!-- Main peak facets -->
+            <path d="M112 504 257 374 343 292 421 192 471 119 518 198 580 266 661 350 794 492 846 523Z" fill="url(#rock)"/>
+            <path d="m112 504 145-130 86-82 78-100 50-73-12 121-25 89-59 175Z" fill="url(#shade)" opacity=".82"/>
+            <path d="m471 119 47 79 62 68 81 84 133 142-187-58-72-103-47-115-30-97z" fill="#173541" opacity=".62"/>
+            <path d="m421 192 50-73 47 79-34-19-20 28-16-8-11 18z" fill="url(#snow)" class="snowcap"/>
+            <path d="m421 192 50-73-10 98-22 38-16-14-22 32-14-5z" fill="#eff9f7" opacity=".86" class="snow"/>
+            <path d="m518 198 62 68-31-8-18 15-28-39-25-17z" fill="#d7edef" opacity=".87" class="snow"/>
+            <path d="m343 292 78-100-17 86-30 44-26-5-25 38-26-5z" fill="#d5e9e9" opacity=".88" class="snow"/>
+            <path d="m580 266 81 84-40-13-20 12-35-37-34-21z" fill="#c5e2e5" opacity=".9" class="snow"/>
+            <path d="m257 374 86-82-36 82-43 34-24-1-34 36-35 9z" fill="#b8d7dd" opacity=".74" class="snow"/>
+            <path d="m661 350 133 142-87-23-44-48-41-33-23-51z" fill="#b4d6dc" opacity=".72" class="snow"/>
+            <path d="m132 501 711 16" stroke="#b2dce2" stroke-opacity=".28"/>
+            <!-- Prediction effects: the slide length and debris fields scale with intensity class. -->
+            <g class="avalanche-layer" id="avalanche-layer">
+              <path class="slide-glow" id="slide-glow" d="M490 188c16 47 48 85 43 120-4 28-48 48-57 77-7 23 16 54 42 72-54-7-100-41-97-75 3-36 45-60 50-91 6-37-9-71-13-103z" fill="#d8fbf3" opacity=".35" filter="url(#blur)"/>
+              <path id="slide-path" d="M490 188c16 47 48 85 43 120-4 28-48 48-57 77-7 23 16 54 42 72-54-7-100-41-97-75 3-36 45-60 50-91 6-37-9-71-13-103z" fill="url(#slide)" opacity=".92"/>
+              <path d="M450 394q27-18 56-4t50 13q-19 20-40 20-42-1-66-29z" fill="#effcfa" opacity=".95"/>
+              <g id="debris">
+                <circle cx="431" cy="421" r="7" fill="#c4e8e9"/><circle cx="476" cy="435" r="5" fill="#e5f6f2"/><circle cx="522" cy="424" r="9" fill="#b0dfe3"/><circle cx="552" cy="443" r="4" fill="#dff3ee"/><circle cx="402" cy="438" r="4" fill="#a3d4dc"/><circle cx="493" cy="454" r="3" fill="#f0fbf7"/>
+              </g>
+              <g id="cracks" fill="none" stroke="#e7f9f4" stroke-width="2" opacity=".8"><path d="m472 229-9 20 12 8-10 17"/><path d="m511 246 8 17-7 12 13 14"/></g>
+            </g>
+            <!-- Atmospheric snow -->
+            <g class="snowfall" fill="#d5eff0"><circle cx="178" cy="168" r="2"/><circle cx="244" cy="104" r="1.5"/><circle cx="686" cy="164" r="2"/><circle cx="749" cy="235" r="1.5"/><circle cx="136" cy="278" r="1.5"/><circle cx="735" cy="93" r="1.5"/><circle cx="345" cy="141" r="1.4"/><circle cx="602" cy="114" r="1.6"/></g>
+          </svg>
+        </div>
+        <div class="scene-foot">Conceptual visualization · not to scale</div>
+      </section>
+      <section class="results" aria-live="polite">
+        <div class="result-lead" id="risk-lead"><span class="eyebrow">Prototype risk class</span><strong class="placeholder" id="risk-category">Awaiting input</strong><small id="risk-copy">Run a scenario to animate this mountain</small></div>
+        <div class="metric"><span>Avalanche likelihood</span><strong id="probability">—</strong><small>P(event) · model estimate</small></div>
+        <div class="metric"><span>Expected size</span><strong id="size">—</strong><small>D-scale · if one occurs</small></div>
+        <div class="metric"><span>Combined score</span><strong id="score">—</strong><small>P(event) × expected size</small></div>
+      </section>
+      <footer>Illustration is conceptual and not a terrain rendering. Prototype estimates are not forecasts or safety guidance.</footer>
+    </main>
+  </div>
+  <script>
+    const form=document.querySelector('#predict-form'), dateInput=document.querySelector('#date'), aspectInput=document.querySelector('#aspect');
+    const directions=['N','NE','E','SE','S','SW','W','NW'];
+    const today=new Date(), localToday=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    dateInput.value=localToday;
+    function aspectLabel(value){const d=Number(value);return `${d}° · ${directions[Math.round(d/45)%8]}`}
+    aspectInput.addEventListener('input',()=>document.querySelector('#aspect-value').textContent=aspectLabel(aspectInput.value));
+    function setRiskScene(data){
+      const mountain=document.querySelector('#mountain'), lead=document.querySelector('#risk-lead');
+      mountain.classList.add('predicted'); mountain.dataset.risk=data.risk_category; lead.dataset.risk=data.risk_category;
+      document.querySelector('#risk-category').textContent=data.risk_category;
+      document.querySelector('#risk-category').classList.remove('placeholder');
+      document.querySelector('#risk-copy').textContent=`Scenario · ${new Date(data.date+'T12:00:00').toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})} · ${aspectLabel(data.aspect)}`;
+      document.querySelector('#probability').textContent=`${(data.probability*100).toFixed(1)}%`;
+      document.querySelector('#size').textContent=`D${data.expected_size_D_given_avalanche.toFixed(1)}`;
+      document.querySelector('#score').textContent=data.risk_score.toFixed(2);
+      document.querySelector('#scene-title').textContent=data.probability>=.5?'Snow in motion':'Unstable signal';
+      document.querySelector('#scene-subtitle').textContent=`${data.risk_category} · conceptual avalanche response`;
+      document.querySelector('#mountain-desc').textContent=`Conceptual illustration responding to a ${data.risk_category.toLowerCase()} model category. It is not a terrain rendering.`;
+      const length=Math.min(1,Math.max(.25,data.risk_score/3));
+      document.querySelector('#slide-path').style.transformOrigin='470px 315px';
+      document.querySelector('#slide-path').style.transform=`scale(${.62+length*.38})`;
+      document.querySelector('#debris').style.opacity=String(.35+length*.65);
+      document.querySelector('#cracks').style.opacity=String(.25+data.probability*.75);
+      document.querySelector('#slide-glow').style.opacity=String(.14+Math.min(data.risk_score/4,.52));
+    }
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();const button=document.querySelector('#submit'),error=document.querySelector('#error');
+      button.disabled=true;button.textContent='Reading the scenario…';error.style.display='none';
+      try{const response=await fetch('/api/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:dateInput.value,aspect:Number(aspectInput.value)})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Prediction request failed.');setRiskScene(data)}
+      catch(err){error.textContent=err.message;error.style.display='block'}
+      finally{button.disabled=false;button.innerHTML='Run prototype prediction <span aria-hidden="true">↗</span>'}
+    });
+  </script>
+</body>
+</html>

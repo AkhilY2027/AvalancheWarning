@@ -29,6 +29,10 @@ Python 3.10+. From this directory, create an environment and install `requiremen
 5. `python train_model.py` saves `models/hurdle_model.joblib` (occurrence probability and conditional size model).
 6. Prepare a one-row CSV with the feature fields and run `python predict.py --input path/to/row.csv`. Output includes P(avalanche), expected D-size conditional on an avalanche, probability-times-size risk score, and category. It always includes the research-only notice.
 
+### Local interactive UI
+
+From this directory, run `python ui.py --help` for options, then `python ui.py` and open `http://127.0.0.1:8765`. The UI uses the saved hurdle model and accepts a date and aspect in degrees. Its mountain is an illustrative SVG that animates after prediction; it is not derived from real terrain or a physical snow model. The current fitted model only uses date and aspect, so the UI intentionally does not imply that slope angle, elevation, weather, or snowpack influence its output. The page and every prediction are labeled as research-only and not for safety decisions. Keep the server bound to localhost unless you deliberately configure otherwise.
+
 The current build uses the supplied full-range CSV and winter bounds. It produced 3,940 exact-date positive rows and 19,700 sampled pseudo-absence rows. No weather, SNOTEL, or terrain data were collected for this run, so the saved model uses only calendar and aspect features. The report's occurrence ROC AUC is from a random row split; it is not a temporal or spatially independent validation. Existing API caches are retained; API collectors skip downloaded request files.
 
 ## Known limitations
